@@ -1,6 +1,5 @@
 import requests
 import sqlite3
-import yaml
 import re
 import time
 
@@ -18,7 +17,7 @@ def create_table(connection):
         pass
 
 def get_raw_data(url):
-    r = requests.get(url=url, timeout=5)
+    r = requests.get(url=url, timeout=7)
     return r.text
 
 
@@ -71,11 +70,12 @@ def main():
         except (requests.exceptions.ConnectTimeout, requests.exceptions.ConnectionError) as exc:
             pass
 
+        timeout = 5
         if request_successful:
-            timeout = 30
-            print("Request #%s. Got %s new measurements, next request after %s seconds.." % (counter, stored_lines_number, timeout))
+            if counter == 0:
+                timeout = 3
+            print("Request #%s. Got %s new measurement(s), next request after %s seconds.." % (counter, stored_lines_number, timeout))
         else:
-            timeout = 7
             print("Error requesting data (%s), next request after %s seconds.." % (counter, timeout))
         
         time.sleep(timeout)
