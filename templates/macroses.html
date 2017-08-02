@@ -1,0 +1,11 @@
+{% macro put_class_if(condition, class) %}
+    {% if (condition) %}
+        class="{{ class }}"
+    {% endif %}
+{% endmacro %}
+
+{% macro put_if(condition, something) %}
+    {% if (condition) %}
+        {{ something }}
+    {% endif %}
+{% endmacro %}
