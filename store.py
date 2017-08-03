@@ -40,11 +40,11 @@ class Store():
     async def _save_from_ram_to_db(self):
         current_minute_start = get_minute_beginning_timestamp()
         measurements_to_store = self._ram_storage.extract_everything_older_than(current_minute_start - 240)
-        measurements = [await self.create_measurement(m) for m in measurements_to_store]
+        measurements = [self.create_measurement(m) for m in measurements_to_store]
         await self.store_to_db(measurements)
 
     @staticmethod
-    async def create_measurement(measurement):
+    def create_measurement(measurement):
         names = ['t1', 't2', 't3', 't4', 'tc', 't0', 'pr', 'hm', 'fr', 'ml']
         values = [round(measurement[key], 2) for key in names]
         kwargs = dict(zip(names, values))
