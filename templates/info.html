@@ -4,4 +4,13 @@
 
 {% block content %}
 	<h4 class="sub-header">Информация</h4>
+    Температура 1: {{ measurement.temperature_1 }}<br>
+    Температура 2: {{ measurement.temperature_2 }}<br>
+    Температура 3: {{ measurement.temperature_3 }}<br>
+    Температура 4: {{ measurement.temperature_4 }}<br>
+    Температура коллектора: {{ measurement.temperature_collector }}<br>
+    Температура контроллера: {{ measurement.temperature_unit }}<br>
+    Давление: {{ measurement.pressure }}<br>
+    Влажность: {{ measurement.humidity }}<br>
+    Данные получены: {{ measurement.timestamp }}<br>
 {% endblock %}
