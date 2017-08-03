@@ -9,6 +9,7 @@ class MeasurementLine:
     def __init__(self, names, line, mc_timestamp):
         self.data = None
         self.hash = None
+        self.original_timestamp = None
         self._parse(line, names, mc_timestamp)
     
     def _parse(self, line, names, mc_timestamp):
@@ -16,7 +17,8 @@ class MeasurementLine:
         self._generate_hash(line)
         values = list(map(float, line.split(',')))
         data = dict(zip(names, values))
-        data['ts'] = self._get_timestamp(data['ts'], parse_timestamp, mc_timestamp)
+        self.original_timestamp = self._get_timestamp(data['ts'], parse_timestamp, mc_timestamp)
+        data['ts'] = get_minute_beginning_timestamp(self.original_timestamp)
         data['power'] = 1
         self.data = data
 
@@ -29,7 +31,7 @@ class MeasurementLine:
     def _get_timestamp(self, measurement_timestamp, parse_timestamp, mc_timestamp):
         seconds_ago = (mc_timestamp - measurement_timestamp) / 1000. + 1
         timestamp = parse_timestamp - seconds_ago
-        return get_minute_beginning_timestamp(timestamp)
+        return timestamp
 
     def __repr__(self):
         return str(self.data)

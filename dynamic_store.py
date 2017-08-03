@@ -7,6 +7,7 @@ class DynamicStore:
         self._old_hashes = set()
         self._hashes = set()
         self._clear_hashes_timestamp = time.time()
+        self._latest_measurement = None
 
     def add(self, measurement):
         if self._hash_is_present(measurement.hash):
@@ -17,11 +18,12 @@ class DynamicStore:
             self.data[timestamp] += measurement
         else:
             self.data[timestamp] = measurement
+        if measurement.original_timestamp > self._latest_measurement.original_timestamp:
+            self._latest_measurement = measurement
         return True
 
     def get_latest(self):
-        max_timestamp = max(self.data.keys())
-        return self.data[max_timestamp]
+        return self._latest_measurement
 
     def extract_everything_older_than(self, timestamp):
         extracted = []
