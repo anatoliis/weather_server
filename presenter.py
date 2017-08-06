@@ -7,36 +7,43 @@ class MeasurementPresenter:
 
     @property
     def temperature_1(self):
-        return round(self._measurement['t1'], 2)
+        return '{:.2f}'.format(self._measurement['t1'])
 
     @property
     def temperature_2(self):
-        return round(self._measurement['t2'], 2)
+        return '{:.2f}'.format(self._measurement['t2'])
 
     @property
     def temperature_3(self):
-        return round(self._measurement['t3'], 2)
+        return '{:.2f}'.format(self._measurement['t3'])
 
     @property
-    def temperature_4(self):
-        return round(self._measurement['t4'], 2)
+    def avg_temperature(self):
+        avg = (self._measurement['t1'] + self._measurement['t2'] + self._measurement['t3']) / 3.
+        return '{:.2f}'.format(avg)
 
     @property
     def temperature_collector(self):
-        return round(self._measurement['tc'], 2)
+        return '{:.2f}'.format(self._measurement['tc'])
 
     @property
     def temperature_unit(self):
-        return round(self._measurement['t0'], 2)
+        return '{:.2f}'.format(self._measurement['t0'])
 
     @property
-    def pressure(self):
-        return round(self._measurement['pr'], 2)
+    def pressure_pa(self):
+        return '{:.2f}'.format(self._measurement['pr'])
+
+    @property
+    def pressure_mm(self):
+        return '{:.2f}'.format(self._measurement['pr'] / 133.3223684)
 
     @property
     def humidity(self):
-        return round(self._measurement['hm'], 2)
+        return '{:.2f}'.format(self._measurement['hm'])
 
     @property
     def timestamp(self):
-        return datetime.fromtimestamp(self._measurement['ts'])
+        date = datetime.fromtimestamp(self._measurement.original_timestamp)
+
+        return date.strftime('%H:%M:%S')
