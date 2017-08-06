@@ -18,7 +18,7 @@ class DynamicStore:
             self.data[timestamp] += measurement
         else:
             self.data[timestamp] = measurement
-        if measurement.original_timestamp > self._latest_measurement.original_timestamp:
+        if self._latest_measurement is None or measurement.original_timestamp > self._latest_measurement.original_timestamp:
             self._latest_measurement = measurement
         return True
 

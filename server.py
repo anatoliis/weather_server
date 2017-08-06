@@ -20,7 +20,7 @@ weather_controller = WeatherController(db_session)
 
 async def handle_now(request):
     template = env.get_template('info.html')
-    latest_measurement = dict(await weather_controller.get_now())
+    latest_measurement = await weather_controller.get_now()
     text = template.render(
         active='info',
         measurement=MeasurementPresenter(latest_measurement)

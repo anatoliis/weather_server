@@ -29,8 +29,7 @@ class WeatherController:
         return new_measurements_stored
 
     async def get_now(self):
-        measurement = await self._store.get_latest_measurement()
-        return measurement.to_dict()
+        return await self._store.get_latest_measurement()
 
     async def get(self, last_hours=12):
         return
