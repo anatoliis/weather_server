@@ -49,18 +49,27 @@ const getDatasetByName = (datasets, name) => {
     return datasets[name];
 };
 
-const getConfig = (labels, temp1) => {
+const getConfig = (labels, avg_temperature, temperature_collector) => {
     return {
         type: 'line',
         data: {
             labels: labels,
-            datasets: [{
-                label: 'Температура 1',
-                backgroundColor: CHART_COLORS.red,
-                borderColor: CHART_COLORS.red,
-                fill: false,
-                data: temp1
-            }],
+            datasets: [
+                {
+                    label: 'Температура',
+                    backgroundColor: CHART_COLORS.blue,
+                    borderColor: CHART_COLORS.blue,
+                    fill: false,
+                    data: avg_temperature
+                },
+                {
+                    label: 'Коллектор',
+                    backgroundColor: CHART_COLORS.red,
+                    borderColor: CHART_COLORS.red,
+                    fill: false,
+                    data: temperature_collector
+                }
+            ],
         },
         options: {
             responsive: true,
@@ -101,9 +110,11 @@ window.onload = function() {
 
     const rawData = getMeasurementsData();
     const datasets = convertToDatasets(rawData);
+    console.log(datasets);
     const labels = getLabels(datasets);
-    const temp1 = getDatasetByName(datasets, 'temperature_1');
-    const config = getConfig(labels, temp1);
+    const avg_temperature = getDatasetByName(datasets, 'temperature_1');
+    const collector_temp = getDatasetByName(datasets, 'temperature_collector');
+    const config = getConfig(labels, avg_temperature, collector_temp);
 
     window.myLine = new Chart(ctx, config);
 };
