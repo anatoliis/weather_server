@@ -5,7 +5,7 @@ class LinesParser:
 
     def parse(self, csv_data):
         if csv_data == None or csv_data == '':
-            return
+            return []
         data = csv_data.split('\n')
         names = data[0].split(',')
         mc_timestamp = float(data.pop())
