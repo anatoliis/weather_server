@@ -31,23 +31,26 @@ const convertToDatasets = (rawData) => {
     return datasets;
 };
 
+const pad = (number) => {
+    return ('0' + number).substr(-2);
+};
+
+const formatDate = (date) => {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return pad(hours) + ':' + pad(minutes);
+};
+
 const getLabels = (datasets) => {
-    return datasets.timestamp;
+    return datasets.timestamp.map(ts => formatDate(new Date(ts * 1000)));
 };
 
 const getDatasetByName = (datasets, name) => {
     return datasets[name];
 };
 
-const randomScalingFactor = () => {
-	return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
-};
-
 const getConfig = (labels, temp1) => {
-    console.log(labels);
-    console.log(temp1);
-
-    const config = {
+    return {
         type: 'line',
         data: {
             labels: labels,
@@ -78,80 +81,17 @@ const getConfig = (labels, temp1) => {
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Month'
+                        labelString: 'Время'
                     }
                 }],
                 yAxes: [{
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Value'
+                        labelString: 'Значение'
                     }
                 }]
             }
-        }
-    };
-
-    return config;
-};
-
-const config = {
-    type: 'line',
-    data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [{
-            label: "My First dataset",
-            backgroundColor: CHART_COLORS.red,
-            borderColor: CHART_COLORS.red,
-            data: [
-                -30, 5, 75, 13, 2, -67, 25
-            ],
-            fill: false,
-        }, {
-            label: "My Second dataset",
-            fill: false,
-            backgroundColor: CHART_COLORS.blue,
-            borderColor: CHART_COLORS.blue,
-            data: [
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor()
-            ],
-        }]
-    },
-    options: {
-        responsive: true,
-        title:{
-            display:true,
-            text:'График температуры за последние 12 часов'
-        },
-        tooltips: {
-            mode: 'index',
-            intersect: false,
-        },
-        hover: {
-            mode: 'nearest',
-            intersect: true
-        },
-        scales: {
-            xAxes: [{
-                display: true,
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Month'
-                }
-            }],
-            yAxes: [{
-                display: true,
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Value'
-                }
-            }]
         }
     }
 };
