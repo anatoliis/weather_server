@@ -1,3 +1,4 @@
+import json
 import asyncio
 import sqlite3
 
@@ -33,8 +34,10 @@ async def handle_now(request):
 
 async def handle_12_hours(request):
     template = env.get_template('12_hours.html')
+    measurements_data = await weather_controller.get_measurements(last_hours=12)
     text = template.render(
-        active='12_hours'
+        active='12_hours',
+        json_data=json.dumps(measurements_data)
     )
     return web.Response(
         content_type='text/html',
@@ -44,8 +47,10 @@ async def handle_12_hours(request):
 
 async def handle_24_hours(request):
     template = env.get_template('24_hours.html')
+    measurements_data = await weather_controller.get_measurements(last_hours=24)
     text = template.render(
-        active='24_hours'
+        active='24_hours',
+        json_data=json.dumps(measurements_data)
     )
     return web.Response(
         content_type='text/html',

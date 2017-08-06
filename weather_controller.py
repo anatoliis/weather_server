@@ -1,3 +1,4 @@
+import time
 import asyncio
 import requests
 import hashlib
@@ -31,8 +32,11 @@ class WeatherController:
     async def get_now(self):
         return await self._store.get_latest_measurement()
 
-    async def get(self, last_hours=12):
-        return
+    async def get_measurements(self, last_hours=12):
+        timestamp = time.time() - 12 * 3600
+        measurements = await self._store.get_older_than(timestamp)
+        measurements = [m.to_dict() for m in measurements]
+        return measurements
 
     async def start(self):
         requests_counter = 0

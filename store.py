@@ -25,6 +25,13 @@ class Store():
     async def get_latest_measurement(self):
         return self._ram_storage.get_latest()
 
+    async def get_older_than(self, timestamp):
+        return self._db_session.query(
+            Measurement
+        ).filter(
+            Measurement.time >= timestamp
+        ).all()
+
     async def try_to_commit(self):
         current_timestamp = time.time()
         time_left_to_save = self._commit_timeout - (current_timestamp - self._last_commit_timestamp)

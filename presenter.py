@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from helpers import convert_pressure_to_mm
+
 
 class MeasurementPresenter:
     def __init__(self, measurement):
@@ -39,7 +41,7 @@ class MeasurementPresenter:
 
     @property
     def pressure_mm(self):
-        return self._formatted(self._measurement['pr'] / 133.3223684)
+        return self._formatted(convert_pressure_to_mm(self._measurement['pr']))
 
     @property
     def humidity(self):

@@ -11,5 +11,10 @@ def get_minute_beginning_timestamp(timestamp=None):
         dt = datetime.fromtimestamp(timestamp)
     return floor(dt.replace(second=0, microsecond=0).timestamp())
 
+
 def generate_hash(line):
     return hashlib.md5(line.encode('utf-8')).hexdigest()
+
+
+def convert_pressure_to_mm(value):
+    return value / 133.3223684
