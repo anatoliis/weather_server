@@ -1,6 +1,5 @@
 import requests
 import sqlite3
-import re
 import time
 
 

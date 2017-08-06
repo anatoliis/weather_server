@@ -1,5 +1,4 @@
 import sqlite3
-import time
 import datetime
 import xlwt
 
@@ -11,9 +10,9 @@ def excel_date(date1):
 
 
 def get_start_of_the_day():
-	now = datetime.datetime.now()
-	start = datetime.datetime(now.year, now.month, now.day)
-	return start.timestamp()
+    now = datetime.datetime.now()
+    start = datetime.datetime(now.year, now.month, now.day)
+    return start.timestamp()
 
 
 conn = sqlite3.connect('weather.db')
@@ -23,10 +22,10 @@ rows = c.execute('SELECT * FROM weather')
 prepared_rows = []
 start = get_start_of_the_day()
 for row in rows:
-	t1, t2, t3, t4, tc, t0, pr, hm, fr, ml, ts, mtime, footprint = row
-	if mtime < start:
-		continue
-	prepared_rows.append([t1, t2, t3, t4, tc, t0, pr, hm, excel_date(mtime)])
+    t1, t2, t3, t4, tc, t0, pr, hm, fr, ml, ts, mtime, footprint = row
+    if mtime < start:
+        continue
+    prepared_rows.append([t1, t2, t3, t4, tc, t0, pr, hm, excel_date(mtime)])
 
 
 wb = xlwt.Workbook()
@@ -42,7 +41,7 @@ ws.write(0, 7, 'Влажность')
 ws.write(0, 8, 'Время')
 
 for i, row in enumerate(prepared_rows):
-	for j, el in enumerate(row):
-		ws.write(i + 1, j, row[j])
+    for j, el in enumerate(row):
+        ws.write(i + 1, j, row[j])
 
 wb.save('weather.xls')
