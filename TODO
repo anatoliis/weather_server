@@ -1,0 +1,4 @@
+1. gunicorn http://aiohttp.readthedocs.io/en/v0.21.6/gunicorn.html
+2. logging
+3. autostart
+4. DB rotating

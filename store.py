@@ -4,7 +4,7 @@ import transaction
 from datetime import datetime
 from sqlalchemy import exists
 
-from measurement_model import Measurement
+from measurement_model import MeasurementModel
 from dynamic_store import DynamicStore
 from helpers import get_minute_beginning_timestamp
 
@@ -25,11 +25,13 @@ class Store():
     async def get_latest_measurement(self):
         return self._ram_storage.get_latest()
 
-    async def get_older_than(self, timestamp):
+    async def get_after_timestamp(self, timestamp):
         return self._db_session.query(
-            Measurement
+            MeasurementModel
         ).filter(
-            Measurement.time >= timestamp
+            MeasurementModel.time >= timestamp
+        ).order_by(
+            MeasurementModel.time.asc()
         ).all()
 
     async def try_to_commit(self):
@@ -55,11 +57,11 @@ class Store():
         names = ['t1', 't2', 't3', 't4', 'tc', 't0', 'pr', 'hm', 'fr', 'ml']
         values = [round(measurement[key], 2) for key in names]
         kwargs = dict(zip(names, values))
-        return Measurement(**kwargs, time=datetime.fromtimestamp(measurement['ts']))
+        return MeasurementModel(**kwargs, time=datetime.fromtimestamp(measurement['ts']))
 
     async def store_to_db(self, measurements):
         for measurement in measurements:
-            already_exists = self._db_session.query(exists().where(Measurement.time == measurement.time)).scalar()
+            already_exists = self._db_session.query(exists().where(MeasurementModel.time == measurement.time)).scalar()
             if not already_exists:
                 self._db_session.add(measurement)
             else:

@@ -5,7 +5,8 @@ import hashlib
 from helpers import get_minute_beginning_timestamp
 
 
-class MeasurementLine:
+class Measurement:
+
     def __init__(self, names, line, mc_timestamp):
         self.data = None
         self.hash = None
@@ -37,7 +38,7 @@ class MeasurementLine:
         return str(self.data)
 
     def __iadd__(self, other):
-        if not isinstance(other, MeasurementLine):
+        if not isinstance(other, Measurement):
             raise RuntimeError("Wrong object type")
         self_ts = self.data['ts']
         other_ts = other['ts']
