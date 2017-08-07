@@ -7,7 +7,8 @@ const CHART_COLORS = {
 	green: 'rgb(75, 192, 192)',
 	blue: 'rgb(54, 162, 235)',
 	purple: 'rgb(153, 102, 255)',
-	grey: 'rgb(201, 203, 207)'
+	grey: 'rgb(201, 203, 207)',
+    black: 'rgb(0, 0, 0)',
 };
 
 const getMeasurementsData = () => {
@@ -86,8 +87,8 @@ const getConfig = (labels, avg_temperature, temperature_collector, humidity, pre
                 },
                 {
                     label: 'Давление',
-                    backgroundColor: CHART_COLORS.gray,
-                    borderColor: CHART_COLORS.gray,
+                    backgroundColor: CHART_COLORS.black,
+                    borderColor: CHART_COLORS.black,
                     fill: false,
                     data: pressure,
                     cubicInterpolationMode: 'monotone',
@@ -131,6 +132,10 @@ const getConfig = (labels, avg_temperature, temperature_collector, humidity, pre
                         scaleLabel: {
                             display: true,
                             labelString: 'Температура'
+                        },
+                        ticks: {
+                            suggestedMin: -50,
+                            suggestedMax: 100
                         }
                     },
                     {
