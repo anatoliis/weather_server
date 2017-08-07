@@ -29,7 +29,7 @@ class Store():
         return self._db_session.query(
             MeasurementModel
         ).filter(
-            MeasurementModel.time >= timestamp
+            MeasurementModel.time >= datetime.fromtimestamp(timestamp)
         ).order_by(
             MeasurementModel.time.asc()
         ).all()

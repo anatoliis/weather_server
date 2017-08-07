@@ -31,20 +31,16 @@ const convertToDatasets = (rawData) => {
     return datasets;
 };
 
-const sortData = (rawData) => {
-    return rawData.sort((a, b) => {
-        return a.timestamp - b.timestamp;
-    });
-};
-
 const pad = (number) => {
     return ('0' + number).substr(-2);
 };
 
 const formatDate = (date) => {
+    const day = date.getDate();
+    const month = date.getMonth();
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    return pad(hours) + ':' + pad(minutes);
+    return pad(day) + '.' + pad(month) + ' ' + pad(hours) + ':' + pad(minutes);
 };
 
 const getLabels = (datasets) => {
@@ -117,7 +113,6 @@ window.onload = function() {
     const ctx = document.getElementById("canvas").getContext("2d");
 
     let rawData = getMeasurementsData();
-    rawData = sortData(rawData);
     const datasets = convertToDatasets(rawData);
     console.log(datasets);
     const labels = getLabels(datasets);

@@ -35,7 +35,6 @@ class WeatherController:
     async def get_measurements(self, last_hours=12):
         timestamp = time.time() - last_hours * 3600
         measurements = await self._store.get_after_timestamp(timestamp)
-        print(measurements)
         measurements = [m.to_dict() for m in measurements]
         return measurements
 
