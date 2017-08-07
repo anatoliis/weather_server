@@ -89,6 +89,11 @@ const getConfig = (labels, avg_temperature, temperature_collector) => {
                 mode: 'nearest',
                 intersect: true
             },
+            elements: {
+                point: {
+                    radius: 0
+                }
+            },
             scales: {
                 xAxes: [{
                     display: true,
@@ -101,7 +106,7 @@ const getConfig = (labels, avg_temperature, temperature_collector) => {
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Значение'
+                        labelString: 'Температура'
                     }
                 }]
             }
