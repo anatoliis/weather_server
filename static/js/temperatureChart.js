@@ -40,7 +40,7 @@ const formatDate = (date) => {
     const month = date.getMonth();
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    return pad(day) + '.' + pad(month) + ' - ' + pad(hours) + ':' + pad(minutes);
+    return pad(day) + '.' + pad(month) + ' | ' + pad(hours) + ':' + pad(minutes);
 };
 
 const getLabels = (datasets) => {
@@ -51,7 +51,7 @@ const getDatasetByName = (datasets, name) => {
     return datasets[name];
 };
 
-const getConfig = (labels, avg_temperature, temperature_collector) => {
+const getConfig = (labels, avg_temperature, temperature_collector, humidity, pressure) => {
     return {
         type: 'line',
         data: {
@@ -59,11 +59,12 @@ const getConfig = (labels, avg_temperature, temperature_collector) => {
             datasets: [
                 {
                     label: 'Наружная',
-                    backgroundColor: CHART_COLORS.blue,
-                    borderColor: CHART_COLORS.blue,
+                    backgroundColor: CHART_COLORS.green,
+                    borderColor: CHART_COLORS.green,
                     fill: false,
                     data: avg_temperature,
-                    cubicInterpolationMode: 'monotone'
+                    cubicInterpolationMode: 'monotone',
+                    yAxisID: 'temperature'
                 },
                 {
                     label: 'Коллектор',
@@ -71,8 +72,27 @@ const getConfig = (labels, avg_temperature, temperature_collector) => {
                     borderColor: CHART_COLORS.red,
                     fill: false,
                     data: temperature_collector,
-                    cubicInterpolationMode: 'monotone'
-                }
+                    cubicInterpolationMode: 'monotone',
+                    yAxisID: 'temperature'
+                },
+                {
+                    label: 'Влажность',
+                    backgroundColor: CHART_COLORS.blue,
+                    borderColor: CHART_COLORS.blue,
+                    fill: false,
+                    data: humidity,
+                    cubicInterpolationMode: 'monotone',
+                    yAxisID: 'humidity'
+                },
+                {
+                    label: 'Давление',
+                    backgroundColor: CHART_COLORS.gray,
+                    borderColor: CHART_COLORS.gray,
+                    fill: false,
+                    data: pressure,
+                    cubicInterpolationMode: 'monotone',
+                    yAxisID: 'pressure'
+                },
             ],
         },
         options: {
@@ -104,13 +124,42 @@ const getConfig = (labels, avg_temperature, temperature_collector) => {
                         labelString: 'Время'
                     }
                 }],
-                yAxes: [{
-                    display: true,
-                    scaleLabel: {
+                yAxes: [
+                    {
+                        id: 'temperature',
                         display: true,
-                        labelString: 'Температура'
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Температура'
+                        }
+                    },
+                    {
+                        id: 'humidity',
+                        display: true,
+                        position: 'right',
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Влажность'
+                        },
+                        ticks: {
+                            min: 0,
+                            max: 100
+                        }
+                    },
+                    {
+                        id: 'pressure',
+                        display: true,
+                        position: 'right',
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Давление'
+                        },
+                        ticks: {
+                            min: 740,
+                            max: 770
+                        }
                     }
-                }]
+                ]
             }
         }
     }
@@ -125,8 +174,8 @@ window.onload = function() {
     const avg_temperature = getDatasetByName(datasets, 'temperature_1');
     const collector_temp = getDatasetByName(datasets, 'temperature_collector');
     const humidity = getDatasetByName(datasets, 'humidity');
-    const pressure = getDatasetByName(datasets, 'pressure');
-    const config = getConfig(labels, avg_temperature, collector_temp);
+    const pressure = getDatasetByName(datasets, 'pressure_mm');
+    const config = getConfig(labels, avg_temperature, collector_temp, humidity, pressure);
 
     window.myLine = new Chart(ctx, config);
 };

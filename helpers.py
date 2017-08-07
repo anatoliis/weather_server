@@ -17,4 +17,4 @@ def generate_hash(line):
 
 
 def convert_pressure_to_mm(value):
-    return value / 133.3223684
+    return round(value / 133.3223684, 2)
