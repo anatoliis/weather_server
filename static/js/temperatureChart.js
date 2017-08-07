@@ -58,7 +58,7 @@ const getConfig = (labels, avg_temperature, temperature_collector) => {
             labels: labels,
             datasets: [
                 {
-                    label: 'Температура',
+                    label: 'Наружная',
                     backgroundColor: CHART_COLORS.blue,
                     borderColor: CHART_COLORS.blue,
                     fill: false,
@@ -79,7 +79,7 @@ const getConfig = (labels, avg_temperature, temperature_collector) => {
             responsive: true,
             title:{
                 display:true,
-                text:'График температуры за последние 12 часов'
+                text:'График температуры'
             },
             tooltips: {
                 mode: 'index',
