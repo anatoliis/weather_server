@@ -136,7 +136,7 @@ const getConfig = (labels, avg_temperature, temperature_collector, humidity, pre
                         ticks: {
                             min: -50,
                             suggestedMin: 0,
-                            max: 110
+                            max: 105
                         }
                     },
                     {
@@ -161,8 +161,8 @@ const getConfig = (labels, avg_temperature, temperature_collector, humidity, pre
                             labelString: 'Давление'
                         },
                         ticks: {
-                            min: 740,
-                            max: 770
+                            min: 745,
+                            max: 765
                         }
                     }
                 ]
