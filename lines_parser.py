@@ -8,7 +8,10 @@ class LinesParser:
             return []
         data = csv_data.split('\n')
         names = data[0].split(',')
-        mc_timestamp = float(data.pop())
+        try:
+            mc_timestamp = float(data.pop())
+        except ValueError:
+            return []
         data = data[1:]
         parsed_data = []
         for line in data:
