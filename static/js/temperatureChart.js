@@ -40,7 +40,7 @@ const formatDate = (date) => {
     const month = date.getMonth();
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    return pad(day) + '.' + pad(month) + ' ' + pad(hours) + ':' + pad(minutes);
+    return pad(day) + '.' + pad(month) + ' - ' + pad(hours) + ':' + pad(minutes);
 };
 
 const getLabels = (datasets) => {
@@ -91,7 +91,9 @@ const getConfig = (labels, avg_temperature, temperature_collector) => {
             },
             elements: {
                 point: {
-                    radius: 0
+                    radius: 0,
+                    hitRadius: 3,
+                    hoverRadius: 3,
                 }
             },
             scales: {
@@ -119,10 +121,11 @@ window.onload = function() {
 
     let rawData = getMeasurementsData();
     const datasets = convertToDatasets(rawData);
-    console.log(datasets);
     const labels = getLabels(datasets);
     const avg_temperature = getDatasetByName(datasets, 'temperature_1');
     const collector_temp = getDatasetByName(datasets, 'temperature_collector');
+    const humidity = getDatasetByName(datasets, 'humidity');
+    const pressure = getDatasetByName(datasets, 'pressure');
     const config = getConfig(labels, avg_temperature, collector_temp);
 
     window.myLine = new Chart(ctx, config);
