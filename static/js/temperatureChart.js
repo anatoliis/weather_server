@@ -31,6 +31,12 @@ const convertToDatasets = (rawData) => {
     return datasets;
 };
 
+const sortData = (rawData) => {
+    return rawData.sort((a, b) => {
+        return a.timestamp - b.timestamp;
+    });
+};
+
 const pad = (number) => {
     return ('0' + number).substr(-2);
 };
@@ -60,14 +66,16 @@ const getConfig = (labels, avg_temperature, temperature_collector) => {
                     backgroundColor: CHART_COLORS.blue,
                     borderColor: CHART_COLORS.blue,
                     fill: false,
-                    data: avg_temperature
+                    data: avg_temperature,
+                    cubicInterpolationMode: 'monotone'
                 },
                 {
                     label: 'Коллектор',
                     backgroundColor: CHART_COLORS.red,
                     borderColor: CHART_COLORS.red,
                     fill: false,
-                    data: temperature_collector
+                    data: temperature_collector,
+                    cubicInterpolationMode: 'monotone'
                 }
             ],
         },
@@ -108,7 +116,8 @@ const getConfig = (labels, avg_temperature, temperature_collector) => {
 window.onload = function() {
     const ctx = document.getElementById("canvas").getContext("2d");
 
-    const rawData = getMeasurementsData();
+    let rawData = getMeasurementsData();
+    rawData = sortData(rawData);
     const datasets = convertToDatasets(rawData);
     console.log(datasets);
     const labels = getLabels(datasets);
