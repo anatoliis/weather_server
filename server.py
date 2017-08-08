@@ -19,7 +19,7 @@ db_connection = sqlite3.connect('weather01.db')
 weather_controller = WeatherController(db_session)
 
 
-async def handle_now(request):
+async def handle_info(request):
     template = env.get_template('info.html')
     latest_measurement = await weather_controller.get_now()
     text = template.render(
@@ -32,7 +32,7 @@ async def handle_now(request):
     )
 
 
-async def handle_now_ajax(request):
+async def handle_info_ajax(request):
     latest_measurement = await weather_controller.get_now()
     response = JSONMeasurementPresenter(latest_measurement).to_json()
     return web.Response(
@@ -41,7 +41,7 @@ async def handle_now_ajax(request):
     )
 
 
-async def handle_12_hours(request):
+async def handle_graph_12_h(request):
     template = env.get_template('12_hours.html')
     measurements_data = await weather_controller.get_measurements(last_hours=12)
     text = template.render(
@@ -54,7 +54,7 @@ async def handle_12_hours(request):
     )
 
 
-async def handle_24_hours(request):
+async def handle_graph_24_h(request):
     template = env.get_template('24_hours.html')
     measurements_data = await weather_controller.get_measurements(last_hours=24)
     text = template.render(
@@ -78,10 +78,10 @@ if __name__ == "__main__":
     loop = asyncio.get_event_loop()
 
     app = web.Application(loop=loop)
-    app.router.add_get('/', handle_now)
-    app.router.add_get('/update', handle_now_ajax)
-    app.router.add_get('/12_hours', handle_12_hours)
-    app.router.add_get('/24_hours', handle_24_hours)
+    app.router.add_get('/', handle_info)
+    app.router.add_get('/update', handle_info_ajax)
+    app.router.add_get('/12_hours', handle_graph_12_h)
+    app.router.add_get('/24_hours', handle_graph_24_h)
     app.router.add_static('/static/', path='./static/', name='static')
 
     loop.run_until_complete(init(app, loop))
