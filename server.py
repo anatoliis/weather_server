@@ -57,6 +57,7 @@ async def handle_24_hours(request):
         text=text
     )
 
+
 async def init(app, loop):
     handler = app.make_handler()
     server = await loop.create_server(handler, '0.0.0.0', 80)
