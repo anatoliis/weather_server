@@ -1,7 +1,7 @@
 from measurement import Measurement
 
 
-class LinesParser:
+class CSVDataParser:
 
     @staticmethod
     def parse(csv_data):
@@ -21,3 +21,6 @@ class LinesParser:
             measurement = Measurement(names, line, mc_timestamp)
             parsed_data.append(measurement)
         return parsed_data
+
+
+parser = CSVDataParser()

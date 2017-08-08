@@ -1,26 +1,31 @@
 import time
 import asyncio
 import requests
-import hashlib
+
+from requests.exceptions import ConnectTimeout, ConnectionError
 
 from store import Store
-from lines_parser import LinesParser
+from csv_data_parser import parser
+
+
+SENSORS_URL = 'http://192.168.0.195/data_all'
+REQUESTS_FREQUENCY = 4
+REQUEST_REPEAT_TIMEOUT = 2
 
 
 class WeatherController:
     def __init__(self, db_session):
         self._store = Store(db_session)
-        self._lines_parser = LinesParser()
+        self._requests_made = 0
 
-    async def get_csv_data(self, url):
-        r = requests.get(url=url, timeout=7)
-        return r.text
-
-    async def get_hash(self, line):
-        return hashlib.md5(line.encode('utf-8')).hexdigest()
-
-    async def parse(self, csv_data):
-        return self._lines_parser.parse(csv_data)
+    @staticmethod
+    async def _get_csv_data(url):
+        try:
+            r = requests.get(url=url, timeout=7)
+            return r.text
+        except (ConnectTimeout, ConnectionError) as exc:
+            print('Error getting data from sensors: {}, repeat after {} sec...'.format(
+                exc, REQUEST_REPEAT_TIMEOUT))
 
     async def store(self, measurements):
         new_measurements_stored = 0
@@ -38,27 +43,22 @@ class WeatherController:
         measurements = [m.to_dict() for m in measurements]
         return measurements
 
-    async def start(self):
-        requests_counter = 0
-        while True:
-            request_successful = False
-            new_measurements = 0
-            try:
-                csv_data = await self.get_csv_data('http://192.168.0.195/data_all')
-                measurements = await self.parse(csv_data)                
-                new_measurements = await self.store(measurements)
-                requests_counter += 1
-                request_successful = True
-            except (requests.exceptions.ConnectTimeout, requests.exceptions.ConnectionError) as exc:
-                pass
+    async def make_request(self):
+        csv_data = await self._get_csv_data(SENSORS_URL)
+        if csv_data is None:
+            return False
+        measurements = parser.parse(csv_data)
+        new_measurements_number = await self.store(measurements)
+        self._requests_made += 1
 
-            timeout = 4
-            if request_successful:
-                if requests_counter == 0:
-                    timeout = 2
-                print("Request #{}. Got {} new measurement(s), next request after {} seconds..".format(
-                    requests_counter, new_measurements, timeout))
-            else:
-                print("Error requesting data (%s), next request after %s seconds.." % (requests_counter, timeout))
-            
+        print("Request #{}. Got {} new measurement(s), next request after {} seconds..".format(
+            self._requests_made, new_measurements_number, REQUESTS_FREQUENCY)
+        )
+        return new_measurements_number != 0
+
+    async def run(self):
+        while True:
+            is_successful = await self.make_request()
+            timeout = REQUESTS_FREQUENCY if is_successful else REQUEST_REPEAT_TIMEOUT
+
             await asyncio.sleep(timeout)
