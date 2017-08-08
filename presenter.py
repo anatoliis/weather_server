@@ -48,7 +48,7 @@ class MeasurementPresenter:
 
     @property
     def timestamp(self):
-        date = datetime.fromtimestamp(self._measurement.original_timestamp)
+        date = datetime.fromtimestamp(self._measurement.real_measurement_timestamp)
         return date.strftime('%H:%M:%S')
 
 
@@ -62,7 +62,7 @@ class JSONMeasurementPresenter:
         temperature_unit = self._measurement['t0']
         pressure_mm = convert_pressure_to_mm(self._measurement['pr'])
         humidity = self._measurement['hm']
-        date = datetime.fromtimestamp(self._measurement.original_timestamp)
+        date = datetime.fromtimestamp(self._measurement.real_measurement_timestamp)
         timestamp = date.strftime('%H:%M:%S')
         return json.dumps({
             'avg_temperature': format_measurement_value(avg_temperature),

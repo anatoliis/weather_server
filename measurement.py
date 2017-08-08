@@ -1,39 +1,31 @@
 import time
-import hashlib
 
 
-from helpers import get_minute_beginning_timestamp
+from helpers import get_minute_beginning_timestamp, calculate_real_timestamp
 
 
 class Measurement:
 
-    def __init__(self, names, line, mc_timestamp):
-        self.data = None
-        self.hash = None
-        self.original_timestamp = None
-        self._parse(line, names, mc_timestamp)
-    
-    def _parse(self, line, names, mc_timestamp):
-        parse_timestamp = time.time()
-        self._generate_hash(line)
-        values = list(map(float, line.split(',')))
-        data = dict(zip(names, values))
-        data['tc'] = round((data['tc'] + data.pop('tc2')) / 2, 2)
-        self.original_timestamp = self._get_timestamp(data['ts'], parse_timestamp, mc_timestamp)
-        data['ts'] = get_minute_beginning_timestamp(self.original_timestamp)
-        data['power'] = 1
+    def __init__(self, data, mcu_fetch_timestamp):
+        self._timestamp = time.time()
         self.data = data
+        self._parse(mcu_fetch_timestamp)
+    
+    def _parse(self, mcu_fetch_timestamp):
+        self.data['tc'] = round((self.data['tc'] + self.data.pop('tc2')) / 2, 2)
+        real_measurement_timestamp = calculate_real_timestamp(self.data['ts'], mcu_fetch_timestamp, self._timestamp)
+        rounded_real_timestamp = get_minute_beginning_timestamp(real_measurement_timestamp)
+        self.data['real_measurement_timestamp'] = real_measurement_timestamp
+        self.data['ts'] = rounded_real_timestamp
+        self.data['power'] = 1
 
-    def to_dict(self):
-        return self.data
+    @property
+    def hash(self):
+        return self.data['hash']
 
-    def _generate_hash(self, line):
-        self.hash = hashlib.md5(line.encode('utf-8')).hexdigest()
-
-    def _get_timestamp(self, measurement_timestamp, parse_timestamp, mc_timestamp):
-        seconds_ago = (mc_timestamp - measurement_timestamp) / 1000. + 1
-        timestamp = parse_timestamp - seconds_ago
-        return timestamp
+    @property
+    def real_measurement_timestamp(self):
+        return self.data['real_measurement_timestamp']
 
     def __repr__(self):
         return str(self.data)
@@ -47,12 +39,12 @@ class Measurement:
             raise RuntimeError("Timestamps do not match, can't add measurements")
 
         total_power = self.data['power'] + other['power']
-        keys = [key for key in self.data.keys() if key not in ('ml', 'ts', 'power')]
+        keys = [key for key in self.data.keys() if key not in {'ml', 'ts', 'power', 'hash'}]
         for key in keys:
             self.data[key] = (self.get_powered_key(key) + other.get_powered_key(key)) / total_power
         self.data['ml'] += other['ml']
         self.data['power'] = total_power
-        self.hash = None
+        self.data['hash'] = None
         return self
 
     def get_powered_key(self, key):

@@ -1,10 +1,10 @@
 from measurement import Measurement
+from helpers import generate_hash
 
 
 class CSVDataParser:
 
-    @staticmethod
-    def parse(csv_data):
+    def parse(self, csv_data):
         if csv_data is None or csv_data == '':
             return []
 
@@ -12,15 +12,24 @@ class CSVDataParser:
         names = data[0].split(',')
 
         try:
-            mc_timestamp = float(data[-1])
+            mcu_fetch_timestamp = float(data[-1])
         except ValueError:
             return []
 
-        parsed_data = []
+        parsed_measurements = []
         for line in data[1:-1]:
-            measurement = Measurement(names, line, mc_timestamp)
-            parsed_data.append(measurement)
-        return parsed_data
+            measurement_data = self._convert_to_data_dict(names, line)
+            measurement_data['hash'] = generate_hash(line)
+            parsed_measurements.append(
+                Measurement(measurement_data, mcu_fetch_timestamp)
+            )
+            
+        return parsed_measurements
+
+    @staticmethod
+    def _convert_to_data_dict(names, line):
+        values = tuple(map(float, line.split(',')))
+        return dict(zip(names, values))
 
 
 parser = CSVDataParser()

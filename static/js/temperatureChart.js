@@ -134,7 +134,7 @@ const getConfig = (labels, avg_temperature, temperature_collector, humidity, pre
                             labelString: 'Температура'
                         },
                         ticks: {
-                            min: -50,
+                            min: 0,
                             suggestedMin: 0,
                             max: 105,
                             autoSkip: true
