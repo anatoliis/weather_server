@@ -18,7 +18,7 @@ class Measurement:
         self._generate_hash(line)
         values = list(map(float, line.split(',')))
         data = dict(zip(names, values))
-        data['tc'] = (data['tc'] + data.pop('tc2')) / 2
+        data['tc'] = round((data['tc'] + data.pop('tc2')) / 2, 2)
         self.original_timestamp = self._get_timestamp(data['ts'], parse_timestamp, mc_timestamp)
         data['ts'] = get_minute_beginning_timestamp(self.original_timestamp)
         data['power'] = 1
