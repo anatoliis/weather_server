@@ -136,7 +136,8 @@ const getConfig = (labels, avg_temperature, temperature_collector, humidity, pre
                         ticks: {
                             min: -50,
                             suggestedMin: 0,
-                            max: 105
+                            max: 105,
+                            autoSkip: true
                         }
                     },
                     {
@@ -149,7 +150,8 @@ const getConfig = (labels, avg_temperature, temperature_collector, humidity, pre
                         },
                         ticks: {
                             min: 0,
-                            max: 100
+                            max: 100,
+                            autoSkip: true
                         }
                     },
                     {
@@ -162,7 +164,8 @@ const getConfig = (labels, avg_temperature, temperature_collector, humidity, pre
                         },
                         ticks: {
                             min: 745,
-                            max: 760
+                            max: 760,
+                            autoSkip: true
                         }
                     }
                 ]
