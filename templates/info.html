@@ -4,13 +4,17 @@
 
 {% block content %}
 	<h4 class="sub-header">Информация</h4>
-    Наружная температура: <b>{{ measurement.avg_temperature }}</b> °C<br>
-    Температура коллектора: <b><span style="color:crimson">{{ measurement.temperature_collector }}</span></b> °C<br>
-    Температура контроллера: {{ measurement.temperature_unit }} °C<br>
-    Давление: <b>{{ measurement.pressure_mm }}</b> мм.рт.ст.<br>
-    Влажность: <b>{{ measurement.humidity }}</b> %<br>
+    Наружная температура: <b><span id="avg_temperature">{{ measurement.avg_temperature }}</span></b> °C<br>
+    Температура коллектора: <b><span id="temperature_collector" style="color:crimson">{{ measurement.temperature_collector }}</span></b> °C<br>
+    Температура контроллера: <span id="temperature_unit">{{ measurement.temperature_unit }}</span> °C<br>
+    Давление: <b><span id="pressure_mm">{{ measurement.pressure_mm }}</span></b> мм.рт.ст.<br>
+    Влажность: <b><span id="humidity">{{ measurement.humidity }}</span></b> %<br>
     <br>
-    Данные получены: {{ measurement.timestamp }}<br>
+    Данные получены: <span id="timestamp">{{ measurement.timestamp }}</span><br>
     <br>
     <small>Источник: <a href="http://192.168.0.195">192.168.0.195</a></small>
+{% endblock %}
+
+{% block scripts %}
+    <script src="static/js/info.js"></script>
 {% endblock %}

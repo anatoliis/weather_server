@@ -7,7 +7,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 
 from weather_controller import WeatherController
 from measurement_model import db_session
-from presenter import MeasurementPresenter
+from presenter import MeasurementPresenter, JSONMeasurementPresenter
 
 
 env = Environment(
@@ -29,6 +29,15 @@ async def handle_now(request):
     return web.Response(
         content_type='text/html',
         text=text
+    )
+
+
+async def handle_now_ajax(request):
+    latest_measurement = await weather_controller.get_now()
+    response = JSONMeasurementPresenter(latest_measurement).to_json()
+    return web.Response(
+        content_type='application/json',
+        text=response
     )
 
 
@@ -70,13 +79,14 @@ if __name__ == "__main__":
 
     app = web.Application(loop=loop)
     app.router.add_get('/', handle_now)
+    app.router.add_get('/update', handle_now_ajax)
     app.router.add_get('/12_hours', handle_12_hours)
     app.router.add_get('/24_hours', handle_24_hours)
     app.router.add_static('/static/', path='./static/', name='static')
 
     loop.run_until_complete(init(app, loop))
 
-    loop.run_until_complete(weather_controller.start())
+    loop.run_until_complete(weather_controller.run())
     try:
         loop.run_forever()
     except:

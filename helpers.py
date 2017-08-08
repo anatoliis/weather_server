@@ -18,3 +18,7 @@ def generate_hash(line):
 
 def convert_pressure_to_mm(value):
     return round(value / 133.3223684, 2)
+
+
+def format_measurement_value(value) -> str:
+    return '{:.2f}'.format(value)
