@@ -99,8 +99,8 @@ const getConfig = (labels, avg_temperature, temperature_collector, humidity, pre
         options: {
             responsive: true,
             title:{
-                display:true,
-                text:'График температуры'
+                display:false,
+                text:'График'
             },
             tooltips: {
                 mode: 'index',
