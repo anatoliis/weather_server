@@ -10,15 +10,17 @@ window.onload = function() {
         'timestamp'
     ];
     const spans = {};
-    valueNames.forEach(name => spans[name] = document.getElementById(name));
+    valueNames.forEach(function(name) {
+        spans[name] = document.getElementById(name);
+    });
 
-    const updateInfo = (spans, newValues) => {
-        Object.keys(newValues).forEach(key => {
+    const updateInfo = function(spans, newValues) {
+        Object.keys(newValues).forEach(function(key) {
             spans[key].innerText = newValues[key];
         });
     };
 
-    setInterval(() => {
+    setInterval(function() {
         const r = new XMLHttpRequest();
         r.open('GET', '/update', true);
         r.onload = function() {

@@ -11,16 +11,16 @@ const CHART_COLORS = {
     black: 'rgb(0, 0, 0)',
 };
 
-const getMeasurementsData = () => {
+function getMeasurementsData() {
     return JSON.parse(document.getElementById('json_data').innerText);
-};
+}
 
-const convertToDatasets = (rawData) => {
+function convertToDatasets(rawData) {
     const datasets = {};
     const keys = Object.keys(rawData[0] || {});
 
-    rawData.forEach(measurement => {
-        keys.forEach(key => {
+    rawData.forEach(function(measurement) {
+        keys.forEach(function(key) {
             if (datasets[key] !== undefined) {
                 datasets[key].push(measurement[key]);
             }
@@ -30,29 +30,29 @@ const convertToDatasets = (rawData) => {
         })
     });
     return datasets;
-};
+}
 
-const pad = (number) => {
+function pad(number) {
     return ('0' + number).substr(-2);
-};
+}
 
-const formatDate = (date) => {
+function formatDate(date) {
     const day = date.getDate();
     const month = date.getMonth();
     const hours = date.getHours();
     const minutes = date.getMinutes();
     return pad(day) + '.' + pad(month) + ' | ' + pad(hours) + ':' + pad(minutes);
-};
+}
 
-const getLabels = (datasets) => {
-    return datasets.timestamp.map(ts => formatDate(new Date(ts * 1000)));
-};
+function getLabels(datasets) {
+    return datasets.timestamp.map(function(ts) { return formatDate(new Date(ts * 1000))});
+}
 
-const getDatasetByName = (datasets, name) => {
+function getDatasetByName(datasets, name) {
     return datasets[name];
-};
+}
 
-const getConfig = (labels, avg_temperature, temperature_collector, humidity, pressure) => {
+function getConfig(labels, avg_temperature, temperature_collector, humidity, pressure) {
     return {
         type: 'line',
         data: {
@@ -171,7 +171,7 @@ const getConfig = (labels, avg_temperature, temperature_collector, humidity, pre
             }
         }
     }
-};
+}
 
 window.onload = function() {
     const ctx = document.getElementById("canvas").getContext("2d");
