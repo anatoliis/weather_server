@@ -174,7 +174,7 @@ function getConfig(labels, avg_temperature, temperature_collector, humidity, pre
 window.onload = function() {
     const ctx = document.getElementById("canvas").getContext("2d");
 
-    let rawData = getMeasurementsData();
+    var rawData = getMeasurementsData();
     const datasets = convertToDatasets(rawData);
     const labels = getLabels(datasets);
     const avg_temperature = getDatasetByName(datasets, 'temperature_1');
