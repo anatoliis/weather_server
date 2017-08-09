@@ -1,5 +1,3 @@
-'use strict';
-
 const CHART_COLORS = {
 	red: 'rgb(255, 99, 132)',
 	orange: 'rgb(255, 159, 64)',

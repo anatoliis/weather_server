@@ -1,5 +1,3 @@
-'use strict';
-
 window.onload = function() {
     const valueNames = [
         'avg_temperature',
