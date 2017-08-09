@@ -131,26 +131,25 @@ const getConfig = (labels, avg_temperature, temperature_collector, humidity, pre
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: 'Температура'
+                            labelString: 'Температура, °C / Влажность, %'
                         },
                         ticks: {
                             min: 0,
-                            suggestedMin: 0,
                             max: 105,
                             autoSkip: true
                         }
                     },
                     {
                         id: 'humidity',
-                        display: true,
-                        position: 'right',
+                        display: false,
+                        position: 'left',
                         scaleLabel: {
                             display: true,
                             labelString: 'Влажность'
                         },
                         ticks: {
                             min: 0,
-                            max: 100,
+                            max: 105,
                             autoSkip: true
                         }
                     },
