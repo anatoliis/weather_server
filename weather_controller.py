@@ -2,7 +2,7 @@ import time
 import asyncio
 import requests
 
-from requests.exceptions import ConnectTimeout, ConnectionError
+from requests.exceptions import ConnectTimeout, ConnectionError, ReadTimeout
 
 from store import Store
 from csv_data_parser import parser
@@ -23,7 +23,7 @@ class WeatherController:
         try:
             r = requests.get(url=url, timeout=7)
             return r.text
-        except (ConnectTimeout, ConnectionError) as exc:
+        except (ConnectTimeout, ConnectionError, ReadTimeout) as exc:
             print('Error getting data from sensors: {}, repeat after {} sec...'.format(
                 exc, REQUEST_REPEAT_TIMEOUT))
 

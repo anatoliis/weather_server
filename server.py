@@ -1,6 +1,5 @@
 import json
 import asyncio
-import sqlite3
 
 from aiohttp import web
 from jinja2 import Environment, PackageLoader, select_autoescape
@@ -15,7 +14,6 @@ env = Environment(
     autoescape=select_autoescape(['html', 'xml'])
 )
 
-db_connection = sqlite3.connect('weather01.db')
 weather_controller = WeatherController(db_session)
 
 
