@@ -9,3 +9,44 @@
         {{ something }}
     {% endif %}
 {% endmacro %}
+
+{% macro sensor_widget(id, value, descr, color, units, file_name) %}
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-{{ color }}">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <object class="svg" data="static/svg/{{ file_name }}.svg" type="image/svg+xml"></object>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <div id="{{ id }}" class="huge">{{ value }}</div> {{ units }}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <span class="pull-right">{{ descr }}</span>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro temperature_widget(value) %}
+    {{ sensor_widget('avg_temperature', value, 'Наружная температура', 'green', '°C', 'thermometer') }}
+{% endmacro %}
+
+{% macro collector_widget(value) %}
+    {{ sensor_widget('temperature_collector', value, 'Температура коллектора', 'red', '°C', 'thermometer') }}
+{% endmacro %}
+
+{% macro pressure_widget(value) %}
+    {{ sensor_widget('pressure_mm', value, 'Давление', 'yellow', 'мм.рт.ст.', 'barometer') }}
+{% endmacro %}
+
+{% macro humidity_widget(value) %}
+    {{ sensor_widget('humidity', value, 'Влажность', 'primary', '%', 'humidity') }}
+{% endmacro %}
+
+{% macro mcu_temperature_widget(value) %}
+    {{ sensor_widget('temperature_unit', value, 'Температура контроллера', 'success', '°C', 'thermometer') }}
+{% endmacro %}

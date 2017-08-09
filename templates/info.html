@@ -1,17 +1,22 @@
 {% extends 'base.html' %}
+{% from "macroses.html" import
+    temperature_widget,
+    collector_widget,
+    pressure_widget,
+    humidity_widget,
+    mcu_temperature_widget
+%}
 
 {% block title %}Инфо{% endblock %}
 
 {% block content %}
-	<h4 class="sub-header">Информация</h4>
-    Наружная температура: <b><span id="avg_temperature">{{ measurement.avg_temperature }}</span></b> °C<br>
-    Температура коллектора: <b><span id="temperature_collector" style="color:crimson">{{ measurement.temperature_collector }}</span></b> °C<br>
+    {{ temperature_widget(measurement.avg_temperature) }}
+    {{ collector_widget(measurement.temperature_collector) }}
+    {{ pressure_widget(measurement.pressure_mm) }}
+    {{ humidity_widget(measurement.humidity) }}
     Температура контроллера: <span id="temperature_unit">{{ measurement.temperature_unit }}</span> °C<br>
-    Давление: <b><span id="pressure_mm">{{ measurement.pressure_mm }}</span></b> мм.рт.ст.<br>
-    Влажность: <b><span id="humidity">{{ measurement.humidity }}</span></b> %<br>
     <br>
-    Данные получены в <span id="timestamp">{{ measurement.timestamp }}</span><br>
-    <br>
+    <small>Данные получены в <span id="timestamp">{{ measurement.timestamp }}</span></small><br>
     <small>Источник: <a href="http://192.168.0.195">192.168.0.195</a></small>
 {% endblock %}
 
