@@ -161,7 +161,7 @@ function getConfig(labels, avg_temperature, temperature_collector, humidity, pre
                         },
                         ticks: {
                             min: 745,
-                            max: 760,
+                            max: 764,
                             autoSkip: true
                         }
                     }
