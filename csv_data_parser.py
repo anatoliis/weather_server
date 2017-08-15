@@ -1,4 +1,4 @@
-from measurement import Measurement
+from measurement import Measurement, ParseException
 from helpers import generate_hash
 
 
@@ -20,9 +20,12 @@ class CSVDataParser:
         for line in data[1:-1]:
             measurement_data = self._convert_to_data_dict(names, line)
             measurement_data['hash'] = generate_hash(line)
-            parsed_measurements.append(
-                Measurement(measurement_data, mcu_fetch_timestamp)
-            )
+            try:
+                parsed_measurements.append(
+                    Measurement(measurement_data, mcu_fetch_timestamp)
+                )
+            except ParseException as exc:
+                print(exc)
             
         return parsed_measurements
 

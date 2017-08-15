@@ -4,12 +4,20 @@ import time
 from helpers import get_minute_beginning_timestamp, calculate_real_timestamp
 
 
+class ParseException(RuntimeError):
+    pass
+
+
 class Measurement:
 
     def __init__(self, data, mcu_fetch_timestamp):
         self._timestamp = time.time()
         self.data = data
-        self._parse(mcu_fetch_timestamp)
+        try:
+            self._parse(mcu_fetch_timestamp)
+        except KeyError as exc:
+            self.data = {}
+            raise ParseException(exc)
     
     def _parse(self, mcu_fetch_timestamp):
         self.data['tc'] = round((self.data['tc'] + self.data.pop('tc2')) / 2, 2)
