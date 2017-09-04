@@ -57,6 +57,7 @@ class JSONMeasurementPresenter:
         self._measurement = measurement
 
     def to_json(self):
+        print(self._measurement)
         avg_temperature = round((self._measurement['t1'] + self._measurement['t2'] + self._measurement['t3']) / 3, 2)
         temperature_collector = self._measurement['tc']
         temperature_unit = self._measurement['t0']

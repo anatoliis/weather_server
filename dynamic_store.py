@@ -23,6 +23,7 @@ class DynamicStore:
         return True
 
     def get_latest(self):
+        print('latest', self._latest_measurement)
         return self._latest_measurement
 
     def extract_everything_older_than(self, timestamp):
