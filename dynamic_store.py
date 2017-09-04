@@ -10,7 +10,6 @@ class DynamicStore:
         self._latest_measurement = None
 
     def add(self, measurement):
-        print('ADDING:', measurement)
         if self._hash_is_present(measurement.hash):
             return False
         self._hashes.add(measurement.hash)
