@@ -2,7 +2,6 @@ window.onload = function () {
     const valueNames = [
         'avg_temperature',
         'temperature_collector',
-        'temperature_unit',
         'pressure_mm',
         'humidity',
         'timestamp'

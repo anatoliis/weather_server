@@ -1,12 +1,12 @@
 const CHART_COLORS = {
-	red: 'rgb(255, 99, 132)',
-	orange: 'rgb(255, 159, 64)',
-	yellow: 'rgb(255, 205, 86)',
-	green: 'rgb(75, 192, 192)',
-	blue: 'rgb(54, 162, 235)',
-	purple: 'rgb(153, 102, 255)',
-	grey: 'rgb(201, 203, 207)',
-    black: 'rgb(0, 0, 0)',
+    red: 'rgb(255, 99, 132)',
+    orange: 'rgb(255, 159, 64)',
+    yellow: 'rgb(255, 205, 86)',
+    green: 'rgb(75, 192, 192)',
+    blue: 'rgb(54, 162, 235)',
+    purple: 'rgb(153, 102, 255)',
+    grey: 'rgb(201, 203, 207)',
+    black: 'rgb(0, 0, 0)'
 };
 
 function getMeasurementsData() {
@@ -17,8 +17,8 @@ function convertToDatasets(rawData) {
     const datasets = {};
     const keys = Object.keys(rawData[0] || {});
 
-    rawData.forEach(function(measurement) {
-        keys.forEach(function(key) {
+    rawData.forEach(function (measurement) {
+        keys.forEach(function (key) {
             if (datasets[key] !== undefined) {
                 datasets[key].push(measurement[key]);
             }
@@ -43,7 +43,9 @@ function formatDate(date) {
 }
 
 function getLabels(datasets) {
-    return datasets.timestamp.map(function(ts) { return formatDate(new Date(ts * 1000))});
+    return datasets.timestamp.map(function (ts) {
+        return formatDate(new Date(ts * 1000))
+    });
 }
 
 function getDatasetByName(datasets, name) {
@@ -91,18 +93,18 @@ function getConfig(labels, avg_temperature, temperature_collector, humidity, pre
                     data: pressure,
                     cubicInterpolationMode: 'monotone',
                     yAxisID: 'pressure'
-                },
-            ],
+                }
+            ]
         },
         options: {
             responsive: true,
-            title:{
-                display:false,
-                text:'График'
+            title: {
+                display: false,
+                text: 'График'
             },
             tooltips: {
                 mode: 'index',
-                intersect: false,
+                intersect: false
             },
             hover: {
                 mode: 'nearest',
@@ -112,7 +114,7 @@ function getConfig(labels, avg_temperature, temperature_collector, humidity, pre
                 point: {
                     radius: 0,
                     hitRadius: 3,
-                    hoverRadius: 3,
+                    hoverRadius: 3
                 }
             },
             scales: {
@@ -171,7 +173,7 @@ function getConfig(labels, avg_temperature, temperature_collector, humidity, pre
     }
 }
 
-window.onload = function() {
+window.onload = function () {
     const ctx = document.getElementById("canvas").getContext("2d");
 
     var rawData = getMeasurementsData();

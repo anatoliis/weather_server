@@ -1,9 +1,8 @@
 import time
-
 from datetime import datetime
 
-from measurement import Measurement
 from exceptions import DataParseError
+from measurement import Measurement
 
 
 class DataParser:
@@ -37,7 +36,8 @@ class DataParser:
         measurement.humidity = values[8]
         measurement.flow_rate = values[9]
         measurement.millilitres = values[10]
-        measurement.time = DataParser.calculate_real_timestamp(values[11], mcu_timestamp)
+        measurement.mcu_timestamp = mcu_timestamp
+        measurement.estimated_measurement_time = DataParser.calculate_real_timestamp(values[11], mcu_timestamp)
         return measurement
 
     @staticmethod

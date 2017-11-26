@@ -1,13 +1,11 @@
-import json
 import asyncio
+import json
 
 from aiohttp import web
 from jinja2 import Environment, PackageLoader, select_autoescape
 
-from weather_controller import WeatherController
 from measurement import db_session
-from presenter import MeasurementPresenter, JSONMeasurementPresenter
-
+from weather_controller import WeatherController
 
 env = Environment(
     loader=PackageLoader('server', 'templates'),
@@ -19,10 +17,10 @@ weather_controller = WeatherController(db_session)
 
 async def handle_info(request):
     template = env.get_template('info.html')
-    latest_measurement = await weather_controller.get_now()
+    latest_measurement = await weather_controller.get_latest_measurement()
     text = template.render(
         active='info',
-        measurement=MeasurementPresenter(latest_measurement)
+        measurement=latest_measurement.to_dict()
     )
     return web.Response(
         content_type='text/html',
@@ -31,21 +29,20 @@ async def handle_info(request):
 
 
 async def handle_info_ajax(request):
-    latest_measurement = await weather_controller.get_now()
-    response = JSONMeasurementPresenter(latest_measurement).to_json()
+    measurement = await weather_controller.get_latest_measurement()
     return web.Response(
         content_type='application/json',
-        text=response
+        text=measurement.to_json()
     )
 
 
 async def handle_graph_12_h(request):
-    return
     template = env.get_template('12_hours.html')
-    measurements_data = await weather_controller.get_measurements(last_hours=12)
+    measurements = await weather_controller.get_measurements(last_hours=12)
+    measurements = tuple(map(lambda m: m.to_dict(), measurements))
     text = template.render(
         active='12_hours',
-        json_data=json.dumps(measurements_data)
+        json_data=json.dumps(measurements)
     )
     return web.Response(
         content_type='text/html',
@@ -54,12 +51,12 @@ async def handle_graph_12_h(request):
 
 
 async def handle_graph_24_h(request):
-    return
     template = env.get_template('24_hours.html')
-    measurements_data = await weather_controller.get_measurements(last_hours=24)
+    measurements = await weather_controller.get_measurements(last_hours=24)
+    measurements = tuple(map(lambda m: m.to_dict(), measurements))
     text = template.render(
         active='24_hours',
-        json_data=json.dumps(measurements_data)
+        json_data=json.dumps(measurements)
     )
     return web.Response(
         content_type='text/html',

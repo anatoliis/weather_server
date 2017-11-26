@@ -1,14 +1,16 @@
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from zope.sqlalchemy import ZopeTransactionExtension
+import json
+from sqlite3 import dbapi2 as sqlite
+
 from sqlalchemy import (
     Column,
     Integer,
     Float,
+    BigInteger,
     DateTime,
     create_engine
 )
-from sqlite3 import dbapi2 as sqlite
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 from helpers import convert_pressure_to_mm
 
@@ -29,24 +31,27 @@ class Measurement(Base):
     humidity = Column(Float, nullable=False)
     flow_rate = Column(Integer, nullable=False)
     millilitres = Column(Integer, nullable=False)
-    time = Column(DateTime, nullable=False)
+    mcu_timestamp = Column(BigInteger, nullable=False, unique=True)
+    estimated_measurement_time = Column(DateTime, nullable=False)
 
     def __repr__(self):
         return "<Measurement timestamp={}>".format(self.time)
 
     def to_dict(self):
         return {
-            'temperature_1': self.temperature_1,
-            'temperature_2': self.temperature_2,
-            'temperature_3': self.temperature_3,
-            'avg_temperature': (self.temperature_1 + self.temperature_2 + self.temperature_3) / 3,
-            'temperature_collector': self.temperature_collector,
-            'temperature_unit': self.temperature_unit,
-            'pressure_pa': self.pressure_mm,
-            'pressure_mm': convert_pressure_to_mm(self.pressure_mm),
-            'humidity': self.humidity,
-            'timestamp': self.time.timestamp()
+            'avg_temperature': self.format_value((self.temperature_1 + self.temperature_2 + self.temperature_3) / 3),
+            'temperature_collector': self.format_value(self.temperature_collector),
+            'pressure_mm': self.format_value(convert_pressure_to_mm(self.pressure_pa)),
+            'humidity': self.format_value(self.humidity),
+            'timestamp': self.estimated_measurement_time.strftime('%H:%M:%S')
         }
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
+    @staticmethod
+    def format_value(value) -> str:
+        return '{:.2f}'.format(value)
 
 
 engine = create_engine('sqlite:///weather01.db', module=sqlite)

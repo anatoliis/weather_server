@@ -9,19 +9,14 @@
 {% block title %}Инфо{% endblock %}
 
 {% block content %}
-    {{ temperature_widget(measurement.avg_temperature) }}
-    {{ collector_widget(measurement.temperature_collector) }}
-    {{ pressure_widget(measurement.pressure_mm) }}
-    {{ humidity_widget(measurement.humidity) }}
-    Температура контроллера: <span id="temperature_unit">{{ measurement.temperature_unit }}</span> °C<br>
+    {{ temperature_widget(measurement["avg_temperature"]) }}
+    {{ collector_widget(measurement["temperature_collector"]) }}
+    {{ pressure_widget(measurement["pressure_mm"]) }}
+    {{ humidity_widget(measurement["humidity"]) }}
+    <b>Время измерения</b>: <b><span id="timestamp">{{ measurement["timestamp"] }}</span></b>
     <br>
-    <small>
-        Время <b>измерения</b> / получения: <b><span id="timestamp">{{ measurement.timestamp }}</span></b> /
-        <span id="current-time"></span>
-    </small>
+    Время получения: <span id="current-time">{{ measurement["timestamp"] }}</span>
     <div class="inforing animated" id="ring"></div>
-    <br>
-    <small>Источник: <a href="http://192.168.0.195">192.168.0.195</a></small>
 {% endblock %}
 
 {% block scripts %}
