@@ -13,10 +13,17 @@
     {{ collector_widget(measurement["temperature_collector"]) }}
     {{ pressure_widget(measurement["pressure_mm"]) }}
     {{ humidity_widget(measurement["humidity"]) }}
-    <b>Время измерения</b>: <b><span id="timestamp">{{ measurement["timestamp"] }}</span></b>
-    <br>
-    Время получения: <span id="current-time">{{ measurement["timestamp"] }}</span>
-    <div class="inforing animated" id="ring"></div>
+    <b>Время измерения</b>:
+    <div class="time-container">
+        <b><span id="timestamp">{{ measurement["timestamp"] }}</span></b>
+        <div class="inforing animated" id="receive-ring"></div>
+    </div>
+    |
+    Время обновления:
+    <div class="time-container">
+        <span id="current-time">{{ measurement["timestamp"] }}</span>
+        <div class="inforing animated" id="current-ring"></div>
+    </div>
 {% endblock %}
 
 {% block scripts %}

@@ -7,7 +7,8 @@ window.onload = function () {
         'timestamp'
     ];
     const spans = {};
-    const ring = document.getElementById('ring');
+    const receiveTimeRing = document.getElementById('receive-ring');
+    const currentTimeRing = document.getElementById('current-ring');
     const currentTime = document.getElementById('current-time');
     const requestFrequency = 3000;
 
@@ -17,8 +18,26 @@ window.onload = function () {
 
     function updateInfo(newValues) {
         Object.keys(newValues).forEach(function (key) {
-            spans[key].innerText = newValues[key];
+            updateField(key, spans[key], newValues[key]);
         });
+        updateCurrentTime();
+    }
+
+    function updateField(key, span, value) {
+
+        if (span.innerText !== value) {
+            if (key === 'timestamp') {
+                pulsateRing(receiveTimeRing, 'green');
+            }
+            span.innerText = value;
+        }
+    }
+
+    function updateCurrentTime() {
+        currentTime.className = "current-time";
+        setTimeout(function () {
+            currentTime.className = "current-time animated";
+        }, 10);
         currentTime.innerText = new Date().toTimeString().split(' ')[0];
     }
 
@@ -41,19 +60,19 @@ window.onload = function () {
     function handleResult(success, responseJSON) {
         if (success) {
             updateInfo(responseJSON);
-            pulsateRing("green");
+            pulsateRing(currentTimeRing, "green");
         } else {
-            pulsateRing("red");
+            pulsateRing(currentTimeRing, "red");
         }
         makeRequestAfterTimeout();
     }
 
-    function pulsateRing(color) {
+    function pulsateRing(ring, color) {
         ring.style.borderColor = color;
         ring.className = "inforing";
         setTimeout(function () {
             ring.className = "inforing animated";
-        }, 100);
+        }, 10);
     }
 
     makeRequestAfterTimeout();
