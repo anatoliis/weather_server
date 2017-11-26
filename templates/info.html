@@ -4,8 +4,7 @@
     collector_widget,
     pressure_widget,
     humidity_widget,
-    mcu_temperature_widget
-%}
+    mcu_temperature_widget %}
 
 {% block title %}Инфо{% endblock %}
 
@@ -16,7 +15,12 @@
     {{ humidity_widget(measurement.humidity) }}
     Температура контроллера: <span id="temperature_unit">{{ measurement.temperature_unit }}</span> °C<br>
     <br>
-    <small>Данные получены в <span id="timestamp">{{ measurement.timestamp }}</span></small><br>
+    <small>
+        Время <b>измерения</b> / получения: <b><span id="timestamp">{{ measurement.timestamp }}</span></b> /
+        <span id="current-time"></span>
+    </small>
+    <div class="inforing animated" id="ring"></div>
+    <br>
     <small>Источник: <a href="http://192.168.0.195">192.168.0.195</a></small>
 {% endblock %}
 

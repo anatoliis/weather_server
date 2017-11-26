@@ -5,7 +5,7 @@ from aiohttp import web
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 from weather_controller import WeatherController
-from measurement_model import db_session
+from measurement import db_session
 from presenter import MeasurementPresenter, JSONMeasurementPresenter
 
 
@@ -40,6 +40,7 @@ async def handle_info_ajax(request):
 
 
 async def handle_graph_12_h(request):
+    return
     template = env.get_template('12_hours.html')
     measurements_data = await weather_controller.get_measurements(last_hours=12)
     text = template.render(
@@ -53,6 +54,7 @@ async def handle_graph_12_h(request):
 
 
 async def handle_graph_24_h(request):
+    return
     template = env.get_template('24_hours.html')
     measurements_data = await weather_controller.get_measurements(last_hours=24)
     text = template.render(

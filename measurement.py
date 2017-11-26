@@ -1,62 +1,58 @@
-import time
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+from zope.sqlalchemy import ZopeTransactionExtension
+from sqlalchemy import (
+    Column,
+    Integer,
+    Float,
+    DateTime,
+    create_engine
+)
+from sqlite3 import dbapi2 as sqlite
+
+from helpers import convert_pressure_to_mm
+
+Base = declarative_base()
 
 
-from helpers import get_minute_beginning_timestamp, calculate_real_timestamp
+class Measurement(Base):
+    __tablename__ = 'weather'
 
-
-class ParseException(RuntimeError):
-    pass
-
-
-class Measurement:
-
-    def __init__(self, data, mcu_fetch_timestamp):
-        self._timestamp = time.time()
-        self.data = data
-        try:
-            self._parse(mcu_fetch_timestamp)
-        except KeyError as exc:
-            self.data = {}
-            raise ParseException(exc)
-    
-    def _parse(self, mcu_fetch_timestamp):
-        self.data['tc'] = round((self.data['tc'] + self.data.pop('tc2')) / 2, 2)
-        real_measurement_timestamp = calculate_real_timestamp(self.data['ts'], mcu_fetch_timestamp, self._timestamp)
-        rounded_real_timestamp = get_minute_beginning_timestamp(real_measurement_timestamp)
-        self.data['real_measurement_timestamp'] = real_measurement_timestamp
-        self.data['ts'] = rounded_real_timestamp
-        self.data['power'] = 1
-
-    @property
-    def hash(self):
-        return self.data['hash']
-
-    @property
-    def real_measurement_timestamp(self):
-        return self.data['real_measurement_timestamp']
+    id = Column(Integer, primary_key=True)
+    temperature_1 = Column(Float, nullable=False)
+    temperature_2 = Column(Float, nullable=False)
+    temperature_3 = Column(Float, nullable=False)
+    temperature_4 = Column(Float, nullable=False)
+    temperature_collector = Column(Float, nullable=False)
+    temperature_unit = Column(Float, nullable=False)
+    pressure_pa = Column(Float, nullable=False)
+    humidity = Column(Float, nullable=False)
+    flow_rate = Column(Integer, nullable=False)
+    millilitres = Column(Integer, nullable=False)
+    time = Column(DateTime, nullable=False)
 
     def __repr__(self):
-        return str(self.data)
+        return "<Measurement timestamp={}>".format(self.time)
 
-    def __iadd__(self, other):
-        if not isinstance(other, Measurement):
-            raise RuntimeError("Wrong object type")
-        self_ts = self.data['ts']
-        other_ts = other['ts']
-        if other_ts != self_ts:
-            raise RuntimeError("Timestamps do not match, can't add measurements")
+    def to_dict(self):
+        return {
+            'temperature_1': self.temperature_1,
+            'temperature_2': self.temperature_2,
+            'temperature_3': self.temperature_3,
+            'avg_temperature': (self.temperature_1 + self.temperature_2 + self.temperature_3) / 3,
+            'temperature_collector': self.temperature_collector,
+            'temperature_unit': self.temperature_unit,
+            'pressure_pa': self.pressure_mm,
+            'pressure_mm': convert_pressure_to_mm(self.pressure_mm),
+            'humidity': self.humidity,
+            'timestamp': self.time.timestamp()
+        }
 
-        total_power = self.data['power'] + other['power']
-        keys = [key for key in self.data.keys() if key not in {'ml', 'ts', 'power', 'hash'}]
-        for key in keys:
-            self.data[key] = (self.get_powered_key(key) + other.get_powered_key(key)) / total_power
-        self.data['ml'] += other['ml']
-        self.data['power'] = total_power
-        self.data['hash'] = None
-        return self
 
-    def get_powered_key(self, key):
-        return self.data[key] * self.data['power']
+engine = create_engine('sqlite:///weather01.db', module=sqlite)
+Base.metadata.create_all(engine)
+Base.metadata.bind = engine
 
-    def __getitem__(self, key):
-        return self.data[key]
+db_session = scoped_session(sessionmaker())
+db_session.configure(bind=engine)
+db_session = db_session()
