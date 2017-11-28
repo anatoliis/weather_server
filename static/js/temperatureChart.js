@@ -43,9 +43,7 @@ function formatDate(date) {
 }
 
 function getLabels(datasets) {
-    return datasets.timestamp.map(function (ts) {
-        return formatDate(new Date(ts * 1000))
-    });
+    return datasets.timestamp;
 }
 
 function getDatasetByName(datasets, name) {
@@ -135,7 +133,7 @@ function getConfig(labels, avg_temperature, temperature_collector, humidity, pre
                         },
                         ticks: {
                             min: 0,
-                            max: 105,
+                            max: 25,
                             autoSkip: true
                         }
                     },
@@ -179,7 +177,7 @@ window.onload = function () {
     var rawData = getMeasurementsData();
     const datasets = convertToDatasets(rawData);
     const labels = getLabels(datasets);
-    const avg_temperature = getDatasetByName(datasets, 'temperature_1');
+    const avg_temperature = getDatasetByName(datasets, 'avg_temperature');
     const collector_temp = getDatasetByName(datasets, 'temperature_collector');
     const humidity = getDatasetByName(datasets, 'humidity');
     const pressure = getDatasetByName(datasets, 'pressure_mm');

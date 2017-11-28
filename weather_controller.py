@@ -48,7 +48,7 @@ class WeatherController:
 
     async def get_measurements(self, last_hours=12) -> list:
         date = datetime.now() - timedelta(hours=last_hours)
-        self.commit(force=True)
+        await self.commit(force=True)
         measurements = self._db_session.query(Measurement).filter(
             Measurement.estimated_measurement_time >= date
         ).order_by(
