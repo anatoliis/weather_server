@@ -83,15 +83,15 @@ function getConfig(labels, avg_temperature, temperature_collector, humidity, pre
                     cubicInterpolationMode: 'monotone',
                     yAxisID: 'humidity'
                 },
-                {
-                    label: 'Давление',
-                    backgroundColor: CHART_COLORS.black,
-                    borderColor: CHART_COLORS.black,
-                    fill: false,
-                    data: pressure,
-                    cubicInterpolationMode: 'monotone',
-                    yAxisID: 'pressure'
-                }
+                // {
+                //     label: 'Давление',
+                //     backgroundColor: CHART_COLORS.black,
+                //     borderColor: CHART_COLORS.black,
+                //     fill: false,
+                //     data: pressure,
+                //     cubicInterpolationMode: 'monotone',
+                //     yAxisID: 'pressure'
+                // }
             ]
         },
         options: {
@@ -105,8 +105,8 @@ function getConfig(labels, avg_temperature, temperature_collector, humidity, pre
                 intersect: false
             },
             hover: {
-                mode: 'nearest',
-                intersect: true
+                mode: 'index',
+                intersect: false
             },
             elements: {
                 point: {
@@ -132,7 +132,7 @@ function getConfig(labels, avg_temperature, temperature_collector, humidity, pre
                             labelString: 'Температура, °C / Влажность, %'
                         },
                         ticks: {
-                            min: 0,
+                            min: -25,
                             max: 25,
                             autoSkip: true
                         }

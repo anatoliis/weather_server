@@ -61,7 +61,7 @@ class WeatherController:
         i = 0
         filtered_measurements = []
         for m in measurements:
-            if i % 25 == 0:
+            if i % 20 == 0:
                 filtered_measurements.append(m)
             i += 1
         return filtered_measurements
