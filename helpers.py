@@ -33,13 +33,12 @@ def average_temperature(temperatures_list):
     number_of_values = 0
     sum_of_values = 0
     for t in temperatures_list:
-        if not temperature_is_valid(t):
-            continue
-        number_of_values += 1
-        sum_of_values += t
+        if temperature_is_valid(t):
+            number_of_values += 1
+            sum_of_values += t
 
     return sum_of_values / number_of_values
 
 
 def temperature_is_valid(temperature) -> bool:
-    return temperature in range(-50, 120)
+    return -50 <= temperature <= 120
