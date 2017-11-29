@@ -12,7 +12,7 @@ from sqlalchemy import (
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-from helpers import convert_pressure_to_mm
+from helpers import convert_pressure_to_mm, average_temperature
 
 Base = declarative_base()
 
@@ -37,9 +37,12 @@ class Measurement(Base):
     def __repr__(self):
         return "<Measurement timestamp={}>".format(self.time)
 
+    def get_avg_temperature(self):
+        return average_temperature([self.temperature_1, self.temperature_2, self.temperature_3])
+
     def to_dict(self):
         return {
-            'avg_temperature': self.format_value((self.temperature_1 + self.temperature_2 + self.temperature_3) / 3),
+            'avg_temperature': self.format_value(self.get_avg_temperature()),
             'temperature_collector': self.format_value(self.temperature_collector),
             'pressure_mm': self.format_value(convert_pressure_to_mm(self.pressure_pa)),
             'humidity': self.format_value(self.humidity),
