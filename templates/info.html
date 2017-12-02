@@ -8,9 +8,9 @@
 
 {% block content %}
     {{ temperature_widget(measurement["avg_temperature"]) }}
-    {{ collector_widget(measurement["temperature_collector"]) }}
-    {{ pressure_widget(measurement["pressure_mm"]) }}
-    {{ humidity_widget(measurement["humidity"]) }}
+    {{ collector_widget(measurement["temperature_collector"], disabled=True) }}
+    {{ pressure_widget(measurement["pressure_mm"], disabled=True) }}
+    {{ humidity_widget(measurement["humidity"], disabled=True) }}
     <b>Время измерения</b>:
     <div class="time-container">
         <b><span id="timestamp">{{ measurement["timestamp"] }}</span></b>

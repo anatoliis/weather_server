@@ -73,6 +73,10 @@ object.svg {
     display: inline-block;
 }
 
+.grayscale {
+    filter: grayscale(100%);
+}
+
 .inforing {
     position: absolute;
     display: inline-block;

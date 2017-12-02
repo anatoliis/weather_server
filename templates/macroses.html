@@ -10,9 +10,9 @@
     {% endif %}
 {% endmacro %}
 
-{% macro sensor_widget(id, value, descr, color, units, file_name) %}
+{% macro sensor_widget(id, value, descr, color, units, file_name, disabled=False) %}
     <div class="col-lg-3 col-md-6">
-        <div class="panel panel-{{ color }}">
+        <div class="panel panel-{{ color }} {{ put_if(disabled, "grayscale") }}">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-4">
@@ -31,22 +31,22 @@
     </div>
 {% endmacro %}
 
-{% macro temperature_widget(value) %}
-    {{ sensor_widget('avg_temperature', value, 'Наружная температура', 'green', '°C', 'thermometer') }}
+{% macro temperature_widget(value, disabled=False) %}
+    {{ sensor_widget('avg_temperature', value, 'Наружная температура', 'green', '°C', 'thermometer', disabled) }}
 {% endmacro %}
 
-{% macro collector_widget(value) %}
-    {{ sensor_widget('temperature_collector', value, 'Температура коллектора', 'red', '°C', 'thermometer') }}
+{% macro collector_widget(value, disabled=False) %}
+    {{ sensor_widget('temperature_collector', value, 'Температура коллектора', 'red', '°C', 'thermometer', disabled) }}
 {% endmacro %}
 
-{% macro pressure_widget(value) %}
-    {{ sensor_widget('pressure_mm', value, 'Давление', 'yellow', 'мм.рт.ст.', 'barometer') }}
+{% macro pressure_widget(value, disabled=False) %}
+    {{ sensor_widget('pressure_mm', value, 'Давление', 'yellow', 'мм.рт.ст.', 'barometer', disabled) }}
 {% endmacro %}
 
-{% macro humidity_widget(value) %}
-    {{ sensor_widget('humidity', value, 'Влажность', 'primary', '%', 'humidity') }}
+{% macro humidity_widget(value, disabled=False) %}
+    {{ sensor_widget('humidity', value, 'Влажность', 'primary', '%', 'humidity', disabled) }}
 {% endmacro %}
 
-{% macro mcu_temperature_widget(value) %}
-    {{ sensor_widget('temperature_unit', value, 'Температура контроллера', 'success', '°C', 'thermometer') }}
+{% macro mcu_temperature_widget(value, disabled=False) %}
+    {{ sensor_widget('temperature_unit', value, 'Температура контроллера', 'success', '°C', 'thermometer', disabled) }}
 {% endmacro %}
