@@ -43,7 +43,7 @@ async def handle_chart(request):
     measurements = await weather_controller.get_measurements(last_hours=hours)
     measurements = tuple(map(lambda m: m.to_dict(), measurements))
     text = template.render(
-        active=f'{hours}_hours',
+        active='%s_hours' % hours,
         json_data=json.dumps(measurements)
     )
     return web.Response(
