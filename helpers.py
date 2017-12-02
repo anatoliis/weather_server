@@ -42,3 +42,17 @@ def average_temperature(temperatures_list):
 
 def temperature_is_valid(temperature) -> bool:
     return -50 <= temperature <= 120
+
+
+def get_hours(params):
+    default_hours = 12
+    hours = params.get('hours', default_hours)
+    try:
+        hours = int(hours)
+    except ValueError:
+        return default_hours
+
+    if hours not in range(1, 72):
+        return default_hours
+
+    return hours

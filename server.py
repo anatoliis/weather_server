@@ -4,6 +4,7 @@ import json
 from aiohttp import web
 from jinja2 import Environment, PackageLoader, select_autoescape
 
+from helpers import get_hours
 from measurement import db_session
 from weather_controller import WeatherController
 
@@ -36,26 +37,13 @@ async def handle_info_ajax(request):
     )
 
 
-async def handle_graph_12_h(request):
-    template = env.get_template('12_hours.html')
-    measurements = await weather_controller.get_measurements(last_hours=12)
+async def handle_chart(request):
+    hours = get_hours(request.rel_url.query)
+    template = env.get_template('chart.html')
+    measurements = await weather_controller.get_measurements(last_hours=hours)
     measurements = tuple(map(lambda m: m.to_dict(), measurements))
     text = template.render(
-        active='12_hours',
-        json_data=json.dumps(measurements)
-    )
-    return web.Response(
-        content_type='text/html',
-        text=text
-    )
-
-
-async def handle_graph_24_h(request):
-    template = env.get_template('24_hours.html')
-    measurements = await weather_controller.get_measurements(last_hours=24)
-    measurements = tuple(map(lambda m: m.to_dict(), measurements))
-    text = template.render(
-        active='24_hours',
+        active=f'{hours}_hours',
         json_data=json.dumps(measurements)
     )
     return web.Response(
@@ -77,8 +65,7 @@ if __name__ == "__main__":
     app = web.Application(loop=loop)
     app.router.add_get('/', handle_info)
     app.router.add_get('/update', handle_info_ajax)
-    app.router.add_get('/12_hours', handle_graph_12_h)
-    app.router.add_get('/24_hours', handle_graph_24_h)
+    app.router.add_get('/chart', handle_chart)
     app.router.add_static('/static/', path='./static/', name='static')
 
     loop.run_until_complete(init(app, loop))

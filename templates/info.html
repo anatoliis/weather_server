@@ -6,8 +6,6 @@
     humidity_widget,
     mcu_temperature_widget %}
 
-{% block title %}Инфо{% endblock %}
-
 {% block content %}
     {{ temperature_widget(measurement["avg_temperature"]) }}
     {{ collector_widget(measurement["temperature_collector"]) }}

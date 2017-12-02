@@ -1,5 +1,13 @@
-<div style="width:100%;">
-    <canvas id="canvas"></canvas>
-</div>
+{% extends 'base.html' %}
 
-<script src="static/js/temperatureChart.js"></script>
+{% block content %}
+    <script id="json_data" type="text/json">
+        {{ json_data|safe }}
+    </script>
+
+    <div style="width:100%;">
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <script src="static/js/temperatureChart.js"></script>
+{% endblock %}

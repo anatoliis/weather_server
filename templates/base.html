@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +11,7 @@
     <meta name="author" content="">
     <link rel="icon" href="static/favicon.ico">
 
-    <title>{% block title %}{% endblock %} | Метеостанция</title>
+    <title>Метеостанция</title>
 
     <!-- Bootstrap core CSS -->
     <link href="static/css/bootstrap.min.css" rel="stylesheet">
@@ -22,54 +22,59 @@
 
     <script src="static/js/Chart.bundle.min.js"></script>
 
-  </head>
+</head>
 
-  <body>
+<body>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">Метеостанция</a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><u>Метеостанция</u></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="/">Информация</a></li>
-            <li><a href="12_hours">12 часов</a></li>
-            <li><a href="24_hours">24 часа</a></li>
-          </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/"><b><u>Информация</u></b></a></li>
+                <li><a href="/chart?hours=1"><b><u>1 час</u></b></a></li>
+                <li><a href="/chart?hours=6"><b><u>6 часов</u></b></a></li>
+                <li><a href="chart?hours=12"><b><u>12 часов</u></b></a></li>
+                <li><a href="chart?hours=24"><b><u>24 часа</u></b></a></li>
+            </ul>
         </div>
-      </div>
-    </nav>
+    </div>
+</nav>
 
-    <div class="container-fluid">
-      <div class="row">
+<div class="container-fluid">
+    <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-            <li {{put_class_if(active=="info", "active")}}><a href="/">Информация</a></li>
-            <li {{put_class_if(active=="12_hours", "active")}}><a href="12_hours">12 часов</a></li>
-            <li {{put_class_if(active=="24_hours", "active")}}><a href="24_hours">24 часа</a></li>
-          </ul>
+            <ul class="nav nav-sidebar">
+                <li {{ put_class_if(active=="info", "active") }}><a href="/">Информация</a></li>
+                <li {{ put_class_if(active=="1_hours", "active") }}><a href="chart?hours=1">1 час</a></li>
+                <li {{ put_class_if(active=="6_hours", "active") }}><a href="chart?hours=6">6 часов</a></li>
+                <li {{ put_class_if(active=="12_hours", "active") }}><a href="chart?hours=12">12 часов</a></li>
+                <li {{ put_class_if(active=="24_hours", "active") }}><a href="chart?hours=24">24 часа</a></li>
+            </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             {% block content %}
             {% endblock content %}
         </div>
-      </div>
     </div>
+</div>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="static/js/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="static/js/bootstrap.min.js"></script>
-    {% block scripts %}
-    {% endblock scripts %}
-  </body>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="static/js/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="static/js/bootstrap.min.js"></script>
+{% block scripts %}
+{% endblock scripts %}
+</body>
 </html>
