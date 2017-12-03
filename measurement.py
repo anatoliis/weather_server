@@ -40,10 +40,13 @@ class Measurement(Base):
     def get_avg_temperature(self):
         return average_temperature([self.temperature_1, self.temperature_2, self.temperature_3])
 
+    def get_collector_temperature(self):
+        return average_temperature([self.temperature_collector])
+
     def to_dict(self):
         return {
             'avg_temperature': self.format_value(self.get_avg_temperature()),
-            'temperature_collector': self.format_value(self.temperature_collector),
+            'temperature_collector': self.format_value(self.get_collector_temperature()),
             'pressure_mm': self.format_value(convert_pressure_to_mm(self.pressure_pa)),
             'humidity': self.format_value(self.humidity),
             'timestamp': self.estimated_measurement_time.strftime('%H:%M:%S')
